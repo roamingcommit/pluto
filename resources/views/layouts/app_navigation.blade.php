@@ -15,6 +15,9 @@
                     <x-breeze.nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-breeze.nav-link>
+                    <x-breeze.nav-link :href="route('trips.index')" :active="request()->routeIs('trips.*')">
+                        {{ __('My Trips') }}
+                    </x-breeze.nav-link>
                 </div>
             </div>
 
@@ -69,6 +72,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-breeze.responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-breeze.responsive-nav-link>
+            <x-breeze.responsive-nav-link :href="route('trips.index')" :active="request()->routeIs('trips.*')">
+                {{ __('My Trips') }}
             </x-breeze.responsive-nav-link>
         </div>
 
