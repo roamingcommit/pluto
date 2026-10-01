@@ -47,4 +47,31 @@ class TripController extends Controller
 
         return redirect()->route('trips.index');
     }
+
+    public function edit(Request $request, Trip $trip): View
+    {
+        abort_unless($trip->user_id === $request->user()->id, 403);
+
+        return view('trips.edit', ['trip' => $trip]);
+    }
+
+    public function update(Request $request, Trip $trip): RedirectResponse
+    {
+        abort_unless($trip->user_id === $request->user()->id, 403);
+
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'hotel' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $trip->title = $validated['title'];
+        $trip->start_date = $validated['start_date'];
+        $trip->end_date = $validated['end_date'];
+        $trip->hotel = $validated['hotel'] ?? null;
+        $trip->save();
+
+        return redirect()->route('trips.show', $trip);
+    }
 }
