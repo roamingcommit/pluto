@@ -74,4 +74,13 @@ class TripController extends Controller
 
         return redirect()->route('trips.show', $trip);
     }
+
+    public function destroy(Request $request, Trip $trip): RedirectResponse
+    {
+        abort_unless($trip->user_id === $request->user()->id, 403);
+
+        $trip->delete();
+
+        return redirect()->route('trips.index');
+    }
 }

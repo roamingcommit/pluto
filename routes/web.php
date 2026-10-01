@@ -13,6 +13,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::delete('/trips/{trip}', [TripController::class, 'destroy'])->name('trips.destroy');
     Route::patch('/trips/{trip}', [TripController::class, 'update'])->name('trips.update');
     Route::get('/trips/{trip}/edit', [TripController::class, 'edit'])->name('trips.edit');
     Route::post('/trips', [TripController::class, 'store'])->name('trips.store');

@@ -8,4 +8,12 @@
     <p>End date: {{ $trip->end_date }}</p>
     <p>Hotel: {{ $trip->hotel ?? 'No hotel added' }}</p>
     <a href="{{ route('trips.edit', $trip) }}">Edit Trip</a>
+
+    <form method="POST" action="{{ route('trips.destroy', $trip) }}"
+          onsubmit="return confirm('Delete this trip permanently? This cannot be undone.');">
+        @csrf
+        @method('DELETE')
+
+        <button type="submit">Delete Trip</button>
+    </form>
 </x-app-layout>
