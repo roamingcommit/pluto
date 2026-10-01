@@ -2,7 +2,7 @@
     <x-slot name="header">
         <h2>My Trips</h2>
     </x-slot>
-
+    <a href="{{ route('trips.create') }}">Create Trip</a>
     <ul>
         @forelse ($trips as $trip)
             <li>
