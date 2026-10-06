@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Activity;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Trip;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,12 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-       $user = User::factory()->create([
+        $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
-       Trip::factory()->count(3)->for($user)->create();
+        Trip::factory()
+            ->count(3)
+            ->for($user)
+            ->has(Activity::factory()->count(2), 'activities')
+            ->create();
     }
 }
