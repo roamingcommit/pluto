@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Trip;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class TripController extends Controller
@@ -20,7 +22,9 @@ class TripController extends Controller
     {
         abort_unless($trip->user_id === $request->user()->id, 403);
 
-        return view('trips.show', ['trip' => $trip]);
+        $activities = $trip->activities()->orderBy('starts_at')->orderBy('id')->get();
+
+        return view('trips.show', ['trip' => $trip, 'activities' => $activities]);
     }
 
     public function create(): View
@@ -65,6 +69,18 @@ class TripController extends Controller
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'hotel' => ['nullable', 'string', 'max:255'],
         ]);
+
+        $hasActivitiesOutsideDates = $trip->activities()
+            ->where(function (Builder $query) use ($validated): void {
+                $query->whereDate('starts_at', '<', $validated['start_date'])
+                    ->orWhereDate('starts_at', '>', $validated['end_date']);
+            })->exists();
+
+        if ($hasActivitiesOutsideDates) {
+            throw ValidationException::withMessages([
+                'end_date' => 'These dates would leave an activity outside the trip. Reschedule or remove that activity first.',
+            ]);
+        }
 
         $trip->title = $validated['title'];
         $trip->start_date = $validated['start_date'];

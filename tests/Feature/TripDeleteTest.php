@@ -56,7 +56,7 @@ test('trip details provide a protected delete form with a confirmation warning',
         ->assertSee('action="'.route('trips.destroy', $trip).'"', false)
         ->assertSee('name="_token"', false)
         ->assertSee('name="_method" value="DELETE"', false)
-        ->assertSee("onsubmit=\"return confirm('Delete this trip permanently? This cannot be undone.');\"", false)
+        ->assertSee("onsubmit=\"return confirm('Delete this trip permanently? Its activities will also be deleted. This cannot be undone.');\"", false)
         ->assertSee('Delete Trip');
     $this->assertModelExists($trip);
 });

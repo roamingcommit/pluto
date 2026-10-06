@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\Userzone\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,15 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::scopeBindings()->group(function () {
+        Route::get('/trips/{trip}/activities/create', [ActivityController::class, 'create'])->name('trips.activities.create');
+        Route::post('/trips/{trip}/activities', [ActivityController::class, 'store'])->name('trips.activities.store');
+        Route::get('/trips/{trip}/activities/{activity}', [ActivityController::class, 'show'])->name('trips.activities.show');
+        Route::get('/trips/{trip}/activities/{activity}/edit', [ActivityController::class, 'edit'])->name('trips.activities.edit');
+        Route::patch('/trips/{trip}/activities/{activity}', [ActivityController::class, 'update'])->name('trips.activities.update');
+        Route::delete('/trips/{trip}/activities/{activity}', [ActivityController::class, 'destroy'])->name('trips.activities.destroy');
+    });
+
     Route::delete('/trips/{trip}', [TripController::class, 'destroy'])->name('trips.destroy');
     Route::patch('/trips/{trip}', [TripController::class, 'update'])->name('trips.update');
     Route::get('/trips/{trip}/edit', [TripController::class, 'edit'])->name('trips.edit');
