@@ -15,6 +15,9 @@ test('the form retains all fields and escapes text after invalid dates', functio
     ]);
 
     $response->assertOk()
+        ->assertSee('role="alert"', false)
+        ->assertSee('Cancel')
+        ->assertDontSee('cdn.jsdelivr.net/npm/@tailwindcss/browser', false)
         ->assertSee('name="title" value="'.e($title).'"', false)
         ->assertSee('name="start_date" value="2026-10-12"', false)
         ->assertSee('name="end_date" value="2026-10-10"', false)
